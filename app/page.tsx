@@ -16,8 +16,6 @@ const initialForm: FormState = {
   partySize: 2,
 };
 
-const SITE_TYPE_OPTIONS = ["STANDARD NONELECTRIC", "RV NONELECTRIC"];
-
 const displayDate = (value: string) =>
   new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(
     new Date(`${value}T00:00:00Z`),
@@ -63,6 +61,10 @@ export default function Home() {
   );
   const resultCampgrounds = useMemo(
     () => Array.from(new Set(result?.matches.map((match) => match.campground) ?? [])).sort(),
+    [result],
+  );
+  const resultSiteTypes = useMemo(
+    () => Array.from(new Set(result?.matches.map((match) => match.campsiteType) ?? [])).sort(),
     [result],
   );
   const visibleMatches = useMemo(
@@ -226,7 +228,7 @@ export default function Home() {
               <fieldset>
                 <legend>Site type</legend>
                 <div className="filter-options">
-                  {SITE_TYPE_OPTIONS.map((siteType) => <label key={siteType}><input type="checkbox" checked={siteTypeFilter.includes(siteType)} onChange={() => toggleFilter(siteType, setSiteTypeFilter)} /> {siteType}</label>)}
+                  {resultSiteTypes.map((siteType) => <label key={siteType}><input type="checkbox" checked={siteTypeFilter.includes(siteType)} onChange={() => toggleFilter(siteType, setSiteTypeFilter)} /> {siteType}</label>)}
                 </div>
               </fieldset>
               <fieldset>
